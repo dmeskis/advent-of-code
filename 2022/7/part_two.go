@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -102,21 +103,33 @@ func main() {
 		list = []*Node{}
 	}
 
-	// diskSpace := 70000000
-	// reqUnusedSpace := 30000000
+	diskSpace := 70000000
+	reqUnusedSpace := 30000000
+
 	placeholder := 0
-	size, total := getSize(&rootNode, &placeholder)
-	fmt.Println(*total)
-	fmt.Println(size)
+	dirSizes := []int{}
+	size, _, sizes := getSize(&rootNode, &placeholder, &dirSizes)
+
+	// sort sizes,
+	sort.Ints(*sizes)
+
+	for _, s := range *sizes {
+		if diskSpace-size+s >= reqUnusedSpace {
+			fmt.Println(s)
+			return
+
+		}
+
+	}
 }
 
-func getSize(node *Node, totalSize *int) (int, *int) {
+func getSize(node *Node, totalSize *int, dirSizes *[]int) (int, *int, *[]int) {
 	size := 0
 
 	size += node.size
 
 	for _, child := range node.children {
-		s, _ := getSize(child, totalSize)
+		s, _, _ := getSize(child, totalSize, dirSizes)
 		size += s
 	}
 
@@ -125,13 +138,8 @@ func getSize(node *Node, totalSize *int) (int, *int) {
 			*totalSize += size
 		}
 
+		*dirSizes = append(*dirSizes, size)
 	}
 
-	fmt.Println("node name: ", node.name)
-	fmt.Println("node size: ", node.size)
-	fmt.Println("size: ", size)
-	fmt.Println("totalsize: ", *totalSize)
-	fmt.Println("----")
-
-	return size, totalSize
+	return size, totalSize, dirSizes
 }

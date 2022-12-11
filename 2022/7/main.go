@@ -108,6 +108,7 @@ func main() {
 	fmt.Println(size)
 }
 
+// totalSize means total of dirs under 100_000 bytes
 func getSize(node *Node, totalSize *int) (int, *int) {
 	size := 0
 	size += node.size
