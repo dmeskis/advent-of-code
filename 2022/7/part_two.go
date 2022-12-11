@@ -102,6 +102,8 @@ func main() {
 		list = []*Node{}
 	}
 
+	// diskSpace := 70000000
+	// reqUnusedSpace := 30000000
 	placeholder := 0
 	size, total := getSize(&rootNode, &placeholder)
 	fmt.Println(*total)
@@ -110,6 +112,7 @@ func main() {
 
 func getSize(node *Node, totalSize *int) (int, *int) {
 	size := 0
+
 	size += node.size
 
 	for _, child := range node.children {
@@ -123,6 +126,12 @@ func getSize(node *Node, totalSize *int) (int, *int) {
 		}
 
 	}
+
+	fmt.Println("node name: ", node.name)
+	fmt.Println("node size: ", node.size)
+	fmt.Println("size: ", size)
+	fmt.Println("totalsize: ", *totalSize)
+	fmt.Println("----")
 
 	return size, totalSize
 }
