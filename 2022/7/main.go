@@ -40,15 +40,11 @@ func main() {
 	list := []*Node{}
 
 	for s.Scan() {
-		line := s.Text()
-		// starting with $ signifies a command
-		split := strings.Split(line, " ")
-		if strings.HasPrefix(line, "$") {
-			// $ cd a
-			// $ ls
-			if split[1] == "cd" {
+		line := strings.Fields(s.Text())
+		if line[0] == "$" {
+			if line[1] == "cd" {
 				// handle root case
-				if split[2] == "/" {
+				if line[2] == "/" {
 					curNode = &rootNode
 
 				}
@@ -58,11 +54,11 @@ func main() {
 					list = []*Node{}
 				}
 
-				if split[2] == ".." {
+				if line[2] == ".." {
 					curNode = curNode.parent
 				} else {
 					for _, child := range curNode.children {
-						if child.name == split[2] {
+						if child.name == line[2] {
 							curNode = child
 							break
 						}
@@ -71,30 +67,30 @@ func main() {
 
 			}
 
-			if split[1] == "ls" {
+			if line[1] == "ls" {
 				// no-op (for now)
 			}
 
 			continue
 		}
 
-		if strings.HasPrefix(line, "dir") {
+		if line[0] == "dir" {
 			// add dir to the child list
 			node := Node{
 				parent: curNode,
-				name:   split[1],
+				name:   line[1],
 			}
 			list = append(list, &node)
 		} else {
 			// file case
-			val, err := strconv.Atoi(split[0])
+			val, err := strconv.Atoi(line[0])
 			if err != nil {
 				log.Fatal(err)
 
 			}
 			node := Node{
 				parent: curNode,
-				name:   split[1],
+				name:   line[1],
 				size:   val,
 			}
 			list = append(list, &node)
@@ -106,7 +102,6 @@ func main() {
 	fmt.Println(*total)
 }
 
-// totalsize gets passed thru
 func getSize(node *Node, totalSize *int) (int, *int) {
 	size := 0
 	if node.size > 0 {
