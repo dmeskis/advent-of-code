@@ -32,70 +32,61 @@ func main() {
 		cols = append(cols, row)
 	}
 
-	visible := 0
+	topScore := 0
 	for y, row := range cols {
 		for x, height := range row {
-			// Always visible on the border
+			// Skip border
 			if x == 0 || y == 0 || x == len(row)-1 || y == len(row)-1 {
-				visible++
 				continue
 			}
 
 			ny := y - 1
+			nScore := 0
 			for ; ny >= 0; ny-- {
-				// otha tree height
+				nScore++
 				oth := cols[ny][x]
 				if oth >= height {
 					break
 				}
 			}
 
-			if ny < 0 {
-				visible++
-				continue
-			}
-
 			ex := x + 1
+			eScore := 0
 			for ; ex < len(row); ex++ {
+				eScore++
 				oth := cols[y][ex]
 				if oth >= height {
 					break
 				}
 			}
 
-			if ex > len(row)-1 {
-				visible++
-				continue
-			}
-
 			sy := y + 1
+			sScore := 0
 			for ; sy < len(cols); sy++ {
+				sScore++
 				oth := cols[sy][x]
 				if oth >= height {
 					break
 				}
 			}
 
-			if sy > len(cols)-1 {
-				visible++
-				continue
-			}
-
 			wx := x - 1
+			wScore := 0
 			for ; wx >= 0; wx-- {
+				wScore++
 				oth := cols[y][wx]
 				if oth >= height {
 					break
 				}
 			}
 
-			if wx < 0 {
-				visible++
-				continue
+			score := nScore * eScore * sScore * wScore
+			if score > topScore {
+				topScore = score
 			}
 		}
 	}
-	fmt.Println(visible)
+	fmt.Println(topScore)
 
 	return
 }
