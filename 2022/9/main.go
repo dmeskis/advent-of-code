@@ -90,21 +90,6 @@ func main() {
 			}
 
 			grid[b][a] = true
-			// fmt.Println(dir, i)
-
-			// for _, col := range grid {
-			// 	line := []string{}
-			// 	for _, val := range col {
-			// 		if val == true {
-			// 			line = append(line, "x")
-			// 		} else {
-			// 			line = append(line, ".")
-
-			// 		}
-
-			// 	}
-			// 	fmt.Println(line)
-			// }
 		}
 	}
 
