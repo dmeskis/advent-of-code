@@ -27,7 +27,10 @@ func main() {
 	X := 1 // register X starts at 1
 
 	instructions := [][]string{}
-	stack := make(map[int]int)
+
+	cycles := 0 // execution counter, basically
+	// isExecuting := false
+	stack := []int{}
 
 	for s.Scan() {
 		fields := strings.Fields(s.Text())
@@ -37,14 +40,30 @@ func main() {
 	// i is a cycle i + 1 is da cycle
 	// + 2 give sthe shit a chance to finish
 	for i := 0; i < len(instructions)+2; i++ {
+
+		if len(stack) > 0 {
+			if cycles > 1 {
+				asdf := len(stack) - 1
+				// add the shit
+				e := stack[len(stack)-1]
+				s = slices.Delete(stack, i, i+1)
+				// X +=
+
+			}
+
+		}
+		// if isExecuting {
+		//     // if cycle
+
+		// }
 		// check if
 
 		fmt.Println("--- Begin cycle ", i+1, " ---")
-		val, ok := stack[i]
-		if ok {
-			fmt.Println("Adding ", val)
-			X += val
-		}
+		// val, ok := stack[i]
+		// if ok {
+		// 	fmt.Println("Adding ", val)
+		// 	X += val
+		// }
 
 		if i+1 == check {
 			fmt.Println("X: ", X)
@@ -62,10 +81,7 @@ func main() {
 
 		if cmd == "addx" {
 			n, _ := strconv.Atoi(instructions[i][1])
-			stack[i+2] = n
-			// X += n
-			// takes two cycles, so have to check again
-			// cycle++
+			stack = append(stack, n)
 		}
 
 		fmt.Println("X: ", X)
